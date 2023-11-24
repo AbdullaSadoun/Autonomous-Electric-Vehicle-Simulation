@@ -44,23 +44,10 @@ int main(int argc, char* argv[]) {
 
     read_file(&EWno, &NSno); // will get the number of buildings in the rows and coloumns from the binary inputfile
 
-    // read customer file
-    //FILE* fin = fopen("C:\Users\abdulla\source\repos\PT53\ARM64\Debug\Customers.txt", "r");
-    //FILE* fin = fopen("Customers.txt", "r");
-    //Customer customer;
-    //// Skip the first line (header)
-    //fgets(line, sizeof(line), file);
+    readprcoessCustomerF(argv[2]); // reads and processes Customer File
 
-    //while (fgets(line, sizeof(line), file) != NULL) {
-    //    sscanf(line, "%d\t%9s\t%10s\t%2s\t%2s\t%d",
-    //        &customer.CustNum,
-    //        customer.FirstName,
-    //        customer.LastName,
-    //        customer.Building,
-    //        customer.Entrance,
-    //        &customer.Floor);
-    readprocessCustomerF(argv[2]);
-    // read events file
+    //readprocessEventF(argv[3]);// read and process events file // make this in the run simulation?
+
 
     //run_simulation(NSno, EWno); // runs the program
 

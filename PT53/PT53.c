@@ -317,7 +317,122 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
 
 }
 
-void readPrcoessCustomerF(char* filename) {
+void readprcoessCustomerF(char* filename) {
+    FILE* file = fopen(filename, "r");
+
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    //const int MAX_CUSTOMERS = 200;
+    Customer customers[MAX_CUSTOMERS];
+    char line[100]; // Adjust size as needed
+    int customerIndex = 0;
+
+    // Skip header line
+    fgets(line, sizeof(line), file);
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        // Remove potential newline character
+        line[strcspn(line, "\n")] = 0;
+
+        // Pass the line into the Customer struct
+        //if (sscanf(line, "%d\t%10s\t%10s\t%2s\t%2s\t%d",&customers[0].CustNum, customer.FirstName, customer.LastName, customer.Building, customer.Entrance, &customer.Floor) == 6) {
+        if (sscanf(line, "%d\t%49s\t%49s\t%2s\t%2s\t%d", &customers[customerIndex].CustNum, customers[customerIndex].FirstName, customers[customerIndex].LastName, customers[customerIndex].Building, customers[customerIndex].Entrance, &customers[customerIndex].Floor) == 6) {
+            //test
+            //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor);
+        }
+        // integrate this /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        int dest_building_row = customer.Building[0] - 'A'; // this finds the row of the destination building (y) based on the letter
+        int dest_building_col = customer.Building[1] - 'A'; // this find the coloumn of the destination building (x) based on the letter
+        int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2; // sets dest coordinates to be later used in functions
+        int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
+
+        if (customer.Entrance[0] == 'N') {
+            dest_y = dest_y - 1;
+            if (customer.Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customer.Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customer.Entrance[0] == 'S') {
+            dest_y = dest_y + 1;
+            if (customer.Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customer.Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customer.Entrance[0] == 'E') {
+            dest_x = dest_x - 1;
+        }
+        else if (customer.Entrance[0] == 'W') {
+            dest_x = dest_x + 1;
+        }
+        else {
+            printf("invalid input");
+        }
+
+        customer.locationx = dest_x;
+        customer.locationy = dest_y;
+
+        //test
+        //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d, coords: %d %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor, customer.locationx, customer.locationy);
+        */
+
+        int dest_building_row = customers[customerIndex].Building[0] - 'A';
+        int dest_building_col = customers[customerIndex].Building[1] - 'A';
+        int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2;
+        int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
+
+        if (customers[customerIndex].Entrance[0] == 'N') {
+            dest_y = dest_y - 1;
+            if (customers[customerIndex].Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customers[customerIndex].Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customers[customerIndex].Entrance[0] == 'S') {
+            dest_y = dest_y + 1;
+            if (customers[customerIndex].Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customers[customerIndex].Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customers[customerIndex].Entrance[0] == 'E') {
+            dest_x = dest_x - 1;
+        }
+        else if (customers[customerIndex].Entrance[0] == 'W') {
+            dest_x = dest_x + 1;
+        }
+        else {
+            printf("invalid input");
+        }
+
+        customers[customerIndex].locationx = dest_x;
+        customers[customerIndex].locationy = dest_y;
+    }
+
+    fclose(file);
+
+    //new test
+    for (int i = 0; i < customerIndex; i++) {
+        printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d, Coords: %d %d\n",customers[i].CustNum, customers[i].FirstName, customers[i].LastName, customers[i].Building, customers[i].Entrance, customers[i].Floor, customers[i].locationx, customers[i].locationy);
+    }
+} 
+
+/*
+void readprocessEventF(char* filename) {
     FILE* file = fopen(filename, "r");
 
     if (file == NULL) {
@@ -336,55 +451,17 @@ void readPrcoessCustomerF(char* filename) {
         line[strcspn(line, "\n")] = 0;
 
         // Pass the line into the Customer struct
-        if (sscanf(line, "%d\t%10s\t%10s\t%2s\t%2s\t%d",&customer.CustNum,customer.FirstName,customer.LastName,customer.Building,customer.Entrance,&customer.Floor) == 6) {
+        if (sscanf(line, "%d\t%10s\t%10s\t%2s\t%2s\t%d", &customer.CustNum, customer.FirstName, customer.LastName, customer.Building, customer.Entrance, &customer.Floor) == 6) {
             //test
             //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor);
         }
-        // integrate this /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        customer.locationx = ;
-        customer.locationy = ;
-        int dest_building_row = dest_building[0] - 'A'; // this finds the row of the destination building (y) based on the letter
-        int dest_building_col = dest_building[1] - 'A'; // this find the coloumn of the destination building (x) based on the letter
-        int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2; // sets dest coordinates to be later used in functions
-        int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
-        //setting the entrance
-        printf("Enter the destination Quadrant (e.g., N, S, NE, NW, etc): ");
-        scanf("%s", dest_quad);
-        dest_quad[2] = '\0';  // Null terminate the string
-        //setting the entrance
-        if (dest_quad[0] == 'N') {
-            dest_y = dest_y - 1;
-            if (dest_quad[1] == 'E') {
-                dest_x = dest_x - 1;
-            }
-            else if (dest_quad[1] == 'W') {
-                dest_x = dest_x + 1;
-            }
-        }
-        else if (dest_quad[0] == 'S') {
-            dest_y = dest_y + 1;
-            if (dest_quad[1] == 'E') {
-                dest_x = dest_x - 1;
-            }
-            else if (dest_quad[1] == 'W') {
-                dest_x = dest_x + 1;
-            }
-        }
-        else if (dest_quad[0] == 'E') {
-            dest_x = dest_x - 1;
-        }
-        else if (dest_quad[0] == 'W') {
-            dest_x = dest_x + 1;
-        }
-        else {
-            printf("invalid input");
-        }
-        customer.locationx = dest_x;
-        customer.locationy = dest_y;
+
+        //test
+        //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d, coords: %d %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor, customer.locationx, customer.locationy);
     }
 
     fclose(file);
-}
+}*/ // 
 
 void run_simulation(int NSno, int EWno) {
     /*
@@ -394,8 +471,6 @@ void run_simulation(int NSno, int EWno) {
     - takes the destination order from the user
     - "take car to destination"
     */
-
-    int timecount=0;
 
     COORD scrsize;
     //int map_height, map_width; 
@@ -433,25 +508,104 @@ void run_simulation(int NSno, int EWno) {
     //    cars[i]={originx, originy, '1' + i};
     //}
 
-    //while loop start
-    while (1) {
-        // read events folder and look at time is it time yet?
+        //car conditions
+    cars[0].x = 0;
+    cars[0].y = 0;
+    //cars[0].destination.x = dest_x;
+    //cars[0].destination.y = dest_y;
+    cars[0].symbol = 'x';
+    cars[0].tempstate = 0;
+    cars[0].batterylevel = 100;
+    
+    Event events;
+    events.time = 100;
+    events.type = 'D';
+    events.OriginCust = 1000;
+    events.DestinationCust = 1044;
+    events.Weight = 10;
+    
+
+
+    int timecount = 0;
+    int fullfillingorder = 0; // yes=1 No=0
+    cars[0].availability = 1;
+    int waittime=0;
+    int reachedorigin = 0;
+    int reacheddestination = 0;
+    int recordneeded = 0;
+
+    
+    while (1) { // make this while(there are no more orders.)
         
-        // take order
+        // is there a current order being fulfilled?
+        if (fullfillingorder == 0) {
+            // get the time for the event
+            if (events.time == timecount) { // change
+                if (cars[0].availability == 1) {
+                    fullfillingorder = 1;
+                    cars[0].availability = 0;
+                    //get origin coordinates from the files
+                    int customerindex = events.OriginCust - 1000;
+                    customers[customerindex].
 
+                    if(cars[0]->x == event origin customer.locationx && cars[0]->y ==event origin customer.locationy){
+                        reachedorigin = 1;
+                        waittime=(floors*15)+(floors*10);
+                        continue;
+                } 
+                else {
+                    if(reachedorigin==1){
+                        goto gotodestination;
+                    }
+                    else {
+                        move_car_to_destination(//put origin coordinates as destination);
+                        
+                        continue;
+                        }
+                    }
+                }
+                else { // car is not available
+                    continue;
+                }
+            }
+            else { // events.time!=time
+                continue;
+            }
+        }
+        else { // fullfillingorder = 1
+            if (waittime == 0 && reachedorigin == 1)  {
+                gotodestination:
+                if (cars[0]->x == event destination customer.locationx && cars[0]->y ==event destination customer.locationy){ //yes
+                    if (recordneeded == 0) {
+                        recordneeded = 1;
+                            reacheddestination = 1;
+                            //waittime = (floors * 15) + (floors * 10); // for origin
+                            // HARDCODE:
+                            waittime = 
+                            continue;
+                    }
+                    else { // recordneeded ==1
+                        //making the record
+                            //fprintf(fout);
+                        //resetting the variables
+                        int fullfillingorder = 0; // yes=1 No=0
+                        cars[0].availability = 1;
+                        int waittime = 0;
+                        int reachedorigin = 0;
+                        int reacheddestination = 0;
+                        int recordneeded = 0;
+                    }
+                }
+                else {
+                    move_car_to_destination(put destination coordinates as destination); // HARDCODE
+                        continue;
+                }
 
-        // check available car
-            // set available 
-                // make the car unavailable anymore
-
-        // check origin coordinates
-            // at origin
-            // go to origin
-
-        //go to destination
-            //append delivery file
-            //make car available again
-        
+            }
+            else { // waittime!=0 or reachedoring !=1
+                waittime--;
+                continue;
+            }
         //increment time counter
         timecount++;
         move_cursor(21, 10);
@@ -463,53 +617,53 @@ void run_simulation(int NSno, int EWno) {
 
 
     // getting destination 
-    char dest_building[3]; // the coordinates of the destination building
-    char dest_quad[3]; // to get the coordinates of the quadrant in the building
-    printf("\n\n\n\nEnter destination building (e.g., AA, AB, etc.): "); // prompt user to enter dersired destination
-    scanf("%2s", dest_building); //%2s to limit the input to 2
-    int dest_building_row = dest_building[0] - 'A'; // this finds the row of the destination building (y) based on the letter
-    int dest_building_col = dest_building[1] - 'A'; // this find the coloumn of the destination building (x) based on the letter
-    int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2; // sets dest coordinates to be later used in functions
-    int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
-    //setting the entrance
-    printf("Enter the destination Quadrant (e.g., N, S, NE, NW, etc): ");
-    scanf("%s", dest_quad);
-    dest_quad[2] = '\0';  // Null terminate the string
-    //setting the entrance
-    if (dest_quad[0] == 'N') {
-        dest_y = dest_y - 1;
-        if (dest_quad[1] == 'E') {
-            dest_x = dest_x - 1;
-        }
-        else if (dest_quad[1] == 'W') {
-            dest_x = dest_x + 1;
-        }
-    }
-    else if (dest_quad[0] == 'S') {
-        dest_y = dest_y + 1;
-        if (dest_quad[1] == 'E') {
-            dest_x = dest_x - 1;
-        }
-        else if (dest_quad[1] == 'W') {
-            dest_x = dest_x + 1;
-        }
-    }
-    else if (dest_quad[0] == 'E') {
-        dest_x = dest_x - 1;
-    }
-    else if (dest_quad[0] == 'W') {
-        dest_x = dest_x + 1;
-    }
-    else {
-        printf("invalid input");
-    }
-    printf("car will go to: %d %d", dest_x, dest_y);
+    //char dest_building[3]; // the coordinates of the destination building
+    //char dest_quad[3]; // to get the coordinates of the quadrant in the building
+    //printf("\n\n\n\nEnter destination building (e.g., AA, AB, etc.): "); // prompt user to enter dersired destination
+    //scanf("%2s", dest_building); //%2s to limit the input to 2
+    //int dest_building_row = dest_building[0] - 'A'; // this finds the row of the destination building (y) based on the letter
+    //int dest_building_col = dest_building[1] - 'A'; // this find the coloumn of the destination building (x) based on the letter
+    //int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2; // sets dest coordinates to be later used in functions
+    //int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
+    ////setting the entrance
+    //printf("Enter the destination Quadrant (e.g., N, S, NE, NW, etc): ");
+    //scanf("%s", dest_quad);
+    //dest_quad[2] = '\0';  // Null terminate the string
+    ////setting the entrance
+    //if (dest_quad[0] == 'N') {
+    //    dest_y = dest_y - 1;
+    //    if (dest_quad[1] == 'E') {
+    //        dest_x = dest_x - 1;
+    //    }
+    //    else if (dest_quad[1] == 'W') {
+    //        dest_x = dest_x + 1;
+    //    }
+    //}
+    //else if (dest_quad[0] == 'S') {
+    //    dest_y = dest_y + 1;
+    //    if (dest_quad[1] == 'E') {
+    //        dest_x = dest_x - 1;
+    //    }
+    //    else if (dest_quad[1] == 'W') {
+    //        dest_x = dest_x + 1;
+    //    }
+    //}
+    //else if (dest_quad[0] == 'E') {
+    //    dest_x = dest_x - 1;
+    //}
+    //else if (dest_quad[0] == 'W') {
+    //    dest_x = dest_x + 1;
+    //}
+    //else {
+    //    printf("invalid input");
+    //}
+    //printf("car will go to: %d %d", dest_x, dest_y);
 
     //car conditions
     cars[0].x = 0;
     cars[0].y = 0;
-    cars[0].destination.x = dest_x;
-    cars[0].destination.y = dest_y;
+    //cars[0].destination.x = dest_x;
+    //cars[0].destination.y = dest_y;
     cars[0].symbol = 'x';
     cars[0].tempstate = 0;
     cars[0].batterylevel = 100;
@@ -522,9 +676,9 @@ void run_simulation(int NSno, int EWno) {
     //}
 
     //becomes:
-    if (cars->x != dest_x || cars->y != dest_y) {
-        move_car_to_destination(&cars[0], dest_x, dest_y, map_width, map_height); // moving the car to the destination
-    }
+    //if (cars->x != dest_x || cars->y != dest_y) {
+    //    move_car_to_destination(&cars[0], dest_x, dest_y, map_width, map_height); // moving the car to the destination
+    //}
 
     return;
 }

@@ -27,6 +27,8 @@
 #define streeth 1
 #define MAX_BUILDINGS 100
 
+#define MAX_CUSTOMERS 200
+
 // Box character codes (decimal), See https://www.lookuptables.com/text/extended-ascii-table
 #define UL		218
 #define LL		192
@@ -73,6 +75,15 @@ typedef struct {
     int locationx;
     int locationy;
 } Customer;
+
+typedef struct {
+    int time;
+    char type;
+    int OriginCust;
+    int DestinationCust;
+    int Weight;
+
+} Event;
 
 Coordinate building_coords[MAX_BUILDINGS * 9];
 //int total_building_coords = 0;
@@ -129,7 +140,7 @@ void draw_car(Car car); // draws the car on its current coordinates on the map
 void clear_car(Car car); // clears the car on its current coordinates on the map
 void run_simulation(int NSno, int EWno); // uses all the functions above to run the simulation of one car
 
-void readprocessCustomerF(char* filename); // Reads and processes the customer file
-void readEventsF(char* filename); // Reads and processes the events file
+void readprcoessCustomerF(char* filename); // Reads and processes the customer file
+//void readprocessEventF(char* filename) // Reads and processes the events file
 
 #endif //PT53
