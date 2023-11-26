@@ -317,7 +317,7 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
 
 }
 
-void readprcoessCustomerF(char* filename) {
+void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]) {
     FILE* file = fopen(filename, "r");
 
     if (file == NULL) {
@@ -326,7 +326,7 @@ void readprcoessCustomerF(char* filename) {
     }
 
     //const int MAX_CUSTOMERS = 200;
-    Customer customers[MAX_CUSTOMERS];
+    //Customer customers[MAX_CUSTOMERS];
     char line[100]; // Adjust size as needed
     int customerIndex = 0;
 
@@ -431,6 +431,7 @@ void readprcoessCustomerF(char* filename) {
     }
 } 
 
+//event file function
 /*
 void readprocessEventF(char* filename) {
     FILE* file = fopen(filename, "r");
@@ -463,7 +464,122 @@ void readprocessEventF(char* filename) {
     fclose(file);
 }*/ // 
 
-void run_simulation(int NSno, int EWno) {
+/*
+int readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]) {
+    FILE* file = fopen(filename, "r");
+
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    //const int MAX_CUSTOMERS = 200;
+    Customer customers[MAX_CUSTOMERS];
+    char line[100]; // Adjust size as needed
+    int customerIndex = 0;
+
+    // Skip header line
+    fgets(line, sizeof(line), file);
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        // Remove potential newline character
+        line[strcspn(line, "\n")] = 0;
+
+        // Pass the line into the Customer struct
+        //if (sscanf(line, "%d\t%10s\t%10s\t%2s\t%2s\t%d",&customers[0].CustNum, customer.FirstName, customer.LastName, customer.Building, customer.Entrance, &customer.Floor) == 6) {
+        if (sscanf(line, "%d\t%49s\t%49s\t%2s\t%2s\t%d", &customers[customerIndex].CustNum, customers[customerIndex].FirstName, customers[customerIndex].LastName, customers[customerIndex].Building, customers[customerIndex].Entrance, &customers[customerIndex].Floor) == 6) {
+            //test
+            //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor);
+        }
+        // integrate this /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        int dest_building_row = customer.Building[0] - 'A'; // this finds the row of the destination building (y) based on the letter
+        int dest_building_col = customer.Building[1] - 'A'; // this find the coloumn of the destination building (x) based on the letter
+        int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2; // sets dest coordinates to be later used in functions
+        int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
+
+        if (customer.Entrance[0] == 'N') {
+            dest_y = dest_y - 1;
+            if (customer.Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customer.Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customer.Entrance[0] == 'S') {
+            dest_y = dest_y + 1;
+            if (customer.Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customer.Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customer.Entrance[0] == 'E') {
+            dest_x = dest_x - 1;
+        }
+        else if (customer.Entrance[0] == 'W') {
+            dest_x = dest_x + 1;
+        }
+        else {
+            printf("invalid input");
+        }
+
+        customer.locationx = dest_x;
+        customer.locationy = dest_y;
+
+        //test
+        //printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d, coords: %d %d\n", customer.CustNum, customer.FirstName, customer.LastName,customer.Building, customer.Entrance, customer.Floor, customer.locationx, customer.locationy);
+        *
+
+        int dest_building_row = customers[customerIndex].Building[0] - 'A';
+        int dest_building_col = customers[customerIndex].Building[1] - 'A';
+        int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2;
+        int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
+
+        if (customers[customerIndex].Entrance[0] == 'N') {
+            dest_y = dest_y - 1;
+            if (customers[customerIndex].Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customers[customerIndex].Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customers[customerIndex].Entrance[0] == 'S') {
+            dest_y = dest_y + 1;
+            if (customers[customerIndex].Entrance[1] == 'E') {
+                dest_x = dest_x - 1;
+            }
+            else if (customers[customerIndex].Entrance[1] == 'W') {
+                dest_x = dest_x + 1;
+            }
+        }
+        else if (customers[customerIndex].Entrance[0] == 'E') {
+            dest_x = dest_x - 1;
+        }
+        else if (customers[customerIndex].Entrance[0] == 'W') {
+            dest_x = dest_x + 1;
+        }
+        else {
+            printf("invalid input");
+        }
+
+        customers[customerIndex].locationx = dest_x;
+        customers[customerIndex].locationy = dest_y;
+    }
+
+    fclose(file);
+
+    //new test
+    for (int i = 0; i < customerIndex; i++) {
+        printf("CustNum: %d, First Name: %s, Last Name: %s, Building: %s, Entrance: %s, Floor: %d, Coords: %d %d\n", customers[i].CustNum, customers[i].FirstName, customers[i].LastName, customers[i].Building, customers[i].Entrance, customers[i].Floor, customers[i].locationx, customers[i].locationy);
+    }
+}*/
+
+void run_simulation(int NSno, int EWno, Customer customers[]) { // added Customer customers[]
     /*
     This functions does the following:
     - generates the map
@@ -494,7 +610,7 @@ void run_simulation(int NSno, int EWno) {
         }
     }
 
-    int numberofcars = 0;
+    
     //printf("how many cars?(1-4)");
     //scanf("%d");
 
@@ -534,9 +650,12 @@ void run_simulation(int NSno, int EWno) {
     int reacheddestination = 0;
     int recordneeded = 0;
 
+    //int destx, localdesty, localfloor;
+    //int sender 
     
     while (1) { // make this while(there are no more orders.)
-        
+        int senderindex = events.OriginCust - 1000;
+        int receiverindex = events.DestinationCust - 1000;
         // is there a current order being fulfilled?
         if (fullfillingorder == 0) {
             // get the time for the event
@@ -545,22 +664,26 @@ void run_simulation(int NSno, int EWno) {
                     fullfillingorder = 1;
                     cars[0].availability = 0;
                     //get origin coordinates from the files
-                    int customerindex = events.OriginCust - 1000;
-                    customers[customerindex].
+                    int senderindex = events.OriginCust - 1000;
+                    int receiverindex = events.DestinationCust - 1000;
+                    //localdestx = customers[senderindex].locationx;
+                    // localdestx = customer[receiverindex].
+                    //localdesty = customers[senderindex].locationy;
+                    //localfloor = customers[senderindex].Floor;
 
-                    if(cars[0]->x == event origin customer.locationx && cars[0]->y ==event origin customer.locationy){
+                    if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) {
                         reachedorigin = 1;
-                        waittime=(floors*15)+(floors*10);
+                        waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
                         continue;
-                } 
-                else {
-                    if(reachedorigin==1){
-                        goto gotodestination;
                     }
                     else {
-                        move_car_to_destination(//put origin coordinates as destination);
-                        
-                        continue;
+                        if (reachedorigin == 1) {
+                            goto gotodestination;
+                        }
+                        else {
+                            move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
+                            //put origin coordinates as destination);
+                            continue;
                         }
                     }
                 }
@@ -573,16 +696,16 @@ void run_simulation(int NSno, int EWno) {
             }
         }
         else { // fullfillingorder = 1
-            if (waittime == 0 && reachedorigin == 1)  {
-                gotodestination:
-                if (cars[0]->x == event destination customer.locationx && cars[0]->y ==event destination customer.locationy){ //yes
+            if (waittime == 0 && reachedorigin == 1) {
+            gotodestination:
+                if (cars[0].x == customers[receiverindex].locationx && cars[0].y == customers[receiverindex].locationy) { //yes
                     if (recordneeded == 0) {
                         recordneeded = 1;
-                            reacheddestination = 1;
-                            //waittime = (floors * 15) + (floors * 10); // for origin
-                            // HARDCODE:
-                            waittime = 
-                            continue;
+                        reacheddestination = 1;
+                        //waittime = (floors * 15) + (floors * 10); // for origin
+                        // HARDCODE:
+                        waittime = (customers[receiverindex].Floor * 15) + (customers[receiverindex].Floor * 10);
+                        continue;
                     }
                     else { // recordneeded ==1
                         //making the record
@@ -597,8 +720,8 @@ void run_simulation(int NSno, int EWno) {
                     }
                 }
                 else {
-                    move_car_to_destination(put destination coordinates as destination); // HARDCODE
-                        continue;
+                    move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                    continue;
                 }
 
             }
@@ -606,12 +729,12 @@ void run_simulation(int NSno, int EWno) {
                 waittime--;
                 continue;
             }
-        //increment time counter
-        timecount++;
-        move_cursor(21, 10);
-        printf("time: %d", timecount);
+            //increment time counter
+            timecount++;
+            move_cursor(21, 10);
+            printf("time: %d", timecount);
+        }
     }
-
     
 
 

@@ -44,12 +44,13 @@ int main(int argc, char* argv[]) {
 
     read_file(&EWno, &NSno); // will get the number of buildings in the rows and coloumns from the binary inputfile
 
-    readprcoessCustomerF(argv[2]); // reads and processes Customer File
+    Customer customers[MAX_CUSTOMERS];
+
+    readprcoessCustomerF(argv[2], customers); // reads and processes Customer File
 
     //readprocessEventF(argv[3]);// read and process events file // make this in the run simulation?
 
-
-    //run_simulation(NSno, EWno); // runs the program
+    run_simulation(NSno, EWno, customers); // runs the program
 
     return 0;
 }

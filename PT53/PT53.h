@@ -27,7 +27,7 @@
 #define streeth 1
 #define MAX_BUILDINGS 100
 
-#define MAX_CUSTOMERS 200
+#define MAX_CUSTOMERS 100
 
 // Box character codes (decimal), See https://www.lookuptables.com/text/extended-ascii-table
 #define UL		218
@@ -138,9 +138,10 @@ int is_building_at(int x, int y); // this function returns 1 if coordinates are 
 void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height);
 void draw_car(Car car); // draws the car on its current coordinates on the map
 void clear_car(Car car); // clears the car on its current coordinates on the map
-void run_simulation(int NSno, int EWno); // uses all the functions above to run the simulation of one car
+void run_simulation(int NSno, int EWno, Customer customers[]); // uses all the functions above to run the simulation of one car
 
-void readprcoessCustomerF(char* filename); // Reads and processes the customer file
+void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]); // Reads and processes the customer file
+//int readprocessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]);
 //void readprocessEventF(char* filename) // Reads and processes the events file
 
 #endif //PT53

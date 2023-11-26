@@ -185,7 +185,9 @@
     <ClInclude Include="PT53.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="fileprocessing.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="mapgeneration.c" />
     <ClCompile Include="PT53.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
