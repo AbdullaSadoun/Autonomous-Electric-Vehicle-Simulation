@@ -144,4 +144,15 @@ void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]); //
 //int readprocessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]);
 //void readprocessEventF(char* filename) // Reads and processes the events file
 
+
+
+
+
+void generateMap(int NSno, int EWno, int* map_height, int* map_width);
+
+
+
+
+
+
 #endif //PT53

@@ -185,6 +185,7 @@
     <ClInclude Include="PT53.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="carmovement.c" />
     <ClCompile Include="fileprocessing.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mapgeneration.c" />

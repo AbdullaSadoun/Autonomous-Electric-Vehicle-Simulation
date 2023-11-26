@@ -32,5 +32,8 @@
     <ClCompile Include="fileprocessing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="carmovement.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
