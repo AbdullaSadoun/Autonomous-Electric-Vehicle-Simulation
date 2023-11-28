@@ -16,15 +16,11 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     - this is the primary function that is used to move the vehicles.
     - the function creates new temporary coordinates that take the car to closest intersection
     - it moves the car by comparing the current car coordinates to destination coordinates
-    - after the car gets to the closest interection it easily makes its way to the building
+    - after the car gets to the closest interection it changes the destination to be the actual destination and then makes its way to the building
     - it does that by doing the same method above my comparing coordinates but this time to destination coordinates
-
-    -Update the following:
-        - function must go to specific entrances (it does)
-        - Second part of the function should have rules implemented on it.
-        - function has to take into account the directions of the streets and avenues (it does)
-        - stop car from going out of the map
-
+    Updates: 
+    - the function now decrements the car battery every time its used. 
+    - 
     */
 
     int temp_x = (dest_x / 4) * 4;
@@ -108,7 +104,7 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     printf("car @: %d %d. Car Batter level = %d. Tempstate:%d", car->x, car->y, car->batterylevel, car->tempstate);
 
     if (car->x == dest_x && car->y == dest_y) { // check if you have reached the destination
-        printf(". Destination reached!, car is at: %d %d\n", dest_x, dest_y);
+        //printf(". Destination reached!, car is at: %d %d\n", dest_x, dest_y);
         Sleep(3000);
         car->tempstate = 0;
         return; // exit the function since destination is reached
