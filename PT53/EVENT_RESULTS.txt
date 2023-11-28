@@ -1,0 +1,9 @@
+time is 100. origincustomer is 1000. destinationcustomer is 1044.
+time is 105. origincustomer is 1020. destinationcustomer is 1031.
+time is 105. origincustomer is 1020. destinationcustomer is 1029.
+time is 125. origincustomer is 1000. destinationcustomer is 1017.
+time is 125. origincustomer is 1000. destinationcustomer is 1022.
+time is 128. origincustomer is 1025. destinationcustomer is 1050.
+time is 128. origincustomer is 1027. destinationcustomer is 1051.
+time is 150. origincustomer is 1040. destinationcustomer is 1048.
+time is 155. origincustomer is 1041. destinationcustomer is 1001.

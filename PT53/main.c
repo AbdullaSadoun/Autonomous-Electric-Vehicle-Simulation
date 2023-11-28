@@ -26,8 +26,8 @@ int main(int argc, char* argv[]) {
         (void)getchar();
         return;
     }*/
-    if (argc != 3) {
-        printf("Usage: %s <BuildingDataFile> <CustomerDataFile>\n", argv[0]);
+    if (argc != 4) { // was != 3
+        printf("Usage: %s <BuildingDataFile> <CustomerDataFile> <EventDataFile>\n", argv[0]);
         return 1;
     }
     
@@ -48,9 +48,11 @@ int main(int argc, char* argv[]) {
 
     readprcoessCustomerF(argv[2], customers); // reads and processes Customer File
 
-    //readprocessEventF(argv[3]);// read and process events file // make this in the run simulation?
+    Event events[MAX_EVENTS];
+    readprocessEventF(argv[3], events);// read and process events file // make this in the run simulation?
 
-    run_simulation(NSno, EWno, customers); // runs the program
+    run_simulation(NSno, EWno, customers, events); // runs the program
 
+    (void) getchar();
     return 0;
 }

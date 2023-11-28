@@ -30,7 +30,7 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     int temp_x = (dest_x / 4) * 4;
     int temp_y = (dest_y / 4) * 4;
 
-    Sleep(1000);
+    Sleep(50);
     clear_car(*car);
 
     if (car->tempstate == 0) {
