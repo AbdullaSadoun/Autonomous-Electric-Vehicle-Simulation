@@ -138,6 +138,9 @@ void add_building_to_coords(int x, int y); // this function adds the coordinate 
 int is_building_at(int x, int y); // this function returns 1 if coordinates are found in a building and 0 otherwise
 //void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height); // "attempts" moves car to destination
 void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height);
+
+//void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height, Car cars[]);
+//void move_car_to_destination(Car cars[], int dest_x, int dest_y, int map_width, int map_height);
 void draw_car(Car car); // draws the car on its current coordinates on the map
 void clear_car(Car car); // clears the car on its current coordinates on the map
 void run_simulation(int NSno, int EWno, Customer customers[], Event events[]); // uses all the functions above to run the simulation of one car

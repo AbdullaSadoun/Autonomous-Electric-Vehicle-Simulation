@@ -265,6 +265,13 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                         else {
                         gotodestination2:
                             move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
+                            //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height, cars[0]); //put origin coordinates as destination);
+                            //move_car_to_destination(cars, customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
+                            
+                            if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) { // new 
+                                reachedorigin = 1; // new 
+                                waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
+                            } // new 
                             //continue;
                         }
                     }
@@ -310,6 +317,7 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                 }
                 else {
                     move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                    //move_car_to_destination(cars, customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height);
                     //continue;
                 }
 

@@ -11,7 +11,8 @@ void clear_car(Car car) {
     printf(" ");
 }
 
-void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height) {
+
+void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height) { 
     /*
     - this is the primary function that is used to move the vehicles.
     - the function creates new temporary coordinates that take the car to closest intersection
@@ -110,9 +111,119 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
         return; // exit the function since destination is reached
     }
 
+    //car->x = cars[0].x;
+    //car->y = cars[0].y;
+
     return;
 
 }
+
+/*
+void move_car_to_destination(Car cars[], int dest_x, int dest_y, int map_width, int map_height) {
+    /*
+    - this is the primary function that is used to move the vehicles.
+    - the function creates new temporary coordinates that take the car to closest intersection
+    - it moves the car by comparing the current car coordinates to destination coordinates
+    - after the car gets to the closest interection it changes the destination to be the actual destination and then makes its way to the building
+    - it does that by doing the same method above my comparing coordinates but this time to destination coordinates
+    Updates:
+    - the function now decrements the car battery every time its used.
+    -
+    *
+
+    int temp_x = (dest_x / 4) * 4;
+    int temp_y = (dest_y / 4) * 4;
+
+    Sleep(50);
+    clear_car(*car);
+
+    if (cars[0].tempstate == 0) {
+        if (cars[0].x < temp_x) { // moving in x-axis
+            if ((cars[0].y % 4 == 0) && ((cars[0].y / 4) % 2 == 0) || (cars[0].y == 0) || (cars[0].y == map_height)) {
+                // if car on movable street, and street/4 is odd numbered street or car is on top strret or botom
+                //car->x++;
+                cars[0].x++;
+            }
+            else {
+                temp_y = temp_y + 4;//increment temporary y by 4
+                draw_car(*car);
+            }
+        }
+        else if (cars[0].x > temp_x) {
+            // Check if y is on an even-numbered block and if it's allowed to move
+            if ((cars[0].y % 4 == 0) && ((cars[0].y / 4) % 2 != 0) || (cars[0].y == 0) || (cars[0].y == map_height)) {
+                cars[0].x--;
+            }
+            else {
+                temp_y = temp_y + 4; //increment temporary y by 4
+                draw_car(*car);
+
+            }
+
+        }
+        else {
+            if (cars[0].y < temp_y) {
+                // Check if x is on an even-numbered block and if it's allowed to move
+                if ((cars[0].x % 4 == 0) && ((cars[0].x / 4) % 2 == 0) || (cars[0].x == 0) || (cars[0].x == map_width)) {
+                    cars[0].y++;
+                }
+                else {
+                    temp_x = temp_x + 4; //increment temporary x by 4
+                    //draw_car(*car);
+                    //return;
+                }
+            }
+            else if (cars[0].y > temp_y) {
+                // Check if x is on an even-numbered block and if it's allowed to move
+                if ((cars[0].x % 4 == 0) && ((cars[0].x / 4) % 2 != 0) || (cars[0].x == 0) || (cars[0].x == map_width)) {
+                    cars[0].y--;
+                }
+                else {
+                    temp_x = temp_x + 4;//increment temporary x by 4
+                    //draw_car(*car);
+                    //return;
+                }
+            }
+            else {
+                cars[0].tempstate = 1;
+                return;
+            }
+        }
+    }
+    else {
+        if (cars[0].x < dest_x) {
+            cars[0].x++;
+        }
+        else if (car->x > dest_x) {
+            cars[0].x--;
+        }
+        else {
+            if (cars[0].y < dest_y) {
+                cars[0].y++;
+            }
+            else if (cars[0].y > dest_y) {
+                cars[0].y--;
+            }
+        }
+    }
+
+    cars[0].batterylevel = car[0].batterylevel - 1;
+    draw_car(*car);
+    move_cursor(10, 15);
+    printf("car @: %d %d. Car Batter level = %d. Tempstate:%d", cars[0].x, cars[0].y, cars[0].batterylevel, cars[0].tempstate);
+
+    if (cars[0].x == dest_x && cars[0].y == dest_y) { // check if you have reached the destination
+        //printf(". Destination reached!, car is at: %d %d\n", dest_x, dest_y);
+        Sleep(3000);
+        cars[0].tempstate = 0;
+        return; // exit the function since destination is reached
+    }
+
+   
+
+    return;
+
+}*/
 /*
 void move_car_to_destination(Car* car, int dest_x, int dest_y) {
     /*
