@@ -300,8 +300,8 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                     else { // recordneeded ==1
                         //making the record
                         events[eventindex].deliverytime = timecount;
-                            fprintf(fout,"500\t%d\t%d\%d\t%d\n", events[eventindex].OriginCust, events[eventindex].DestinationCust, events[eventindex].pickuptime, events[eventindex].deliverytime);
-                            // 
+                        fprintf(fout,"500\t%d\t%d\%d\t%d\n", events[eventindex].OriginCust, events[eventindex].DestinationCust, events[eventindex].pickuptime, events[eventindex].deliverytime); // make sure to add not overwrite
+                        // 
                         //remove the event from the list. 
                         //resetting the variables
                         fullfillingorder = 0; // yes=1 No=0
