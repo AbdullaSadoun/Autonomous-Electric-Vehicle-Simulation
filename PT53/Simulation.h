@@ -1,7 +1,7 @@
 #pragma once
 #pragma once
-#ifndef PT53_h
-#define PT53_h
+#ifndef Simulation_h
+#define Simulation_h
 
 #pragma once
 
@@ -58,6 +58,9 @@ typedef struct {
     int batterylevel;
     int tempstate;
     int availability;
+    int temp_x;
+    int temp_y;
+    int tempstateset;
 
 } Car;
 
@@ -160,4 +163,4 @@ void generateMap(int NSno, int EWno, int* map_height, int* map_width);
 
 
 
-#endif //PT53
+#endif //Simulation

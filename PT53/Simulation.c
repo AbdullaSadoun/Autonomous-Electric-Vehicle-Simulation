@@ -1,4 +1,4 @@
-#include "PT53.h"
+#include "Simulation.h"
 
 void move_cursor(int row, int col) // move the cursor to where the next character will printed
 {
@@ -135,9 +135,128 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
     int reacheddestination = 0;
     int recordneeded = 0;
     int exitloop = 0;
-    int timecount=98;
+    int timecount=0;
     
     int eventindex=0;
+
+
+    int senderindex, receiverindex;
+
+
+    while (1) { // make this while(there are no more orders.) //exitloop != 1 
+        //move_cursor(21, 10);
+        //printf("time: %d", timecount);
+        senderindex = events[eventindex].OriginCust - 1000;
+        receiverindex = events[eventindex].DestinationCust - 1000;
+        // is there a current order being fulfilled?
+        if (fullfillingorder == 0) {
+            // get the time for the event
+            if (events[eventindex].time <= timecount) { // changed was ==
+                if (cars[0].availability == 1) {
+                    fullfillingorder = 1;
+                    cars[0].availability = 0;
+                    cars[0].tempstateset = 0;
+                    events[eventindex].pickuptime = timecount;
+                    //get origin coordinates from the files
+                    //int senderindex = events.OriginCust - 1000;
+                    //int receiverindex = events.DestinationCust - 1000;
+                    senderindex = events[eventindex].OriginCust - 1000;
+                    receiverindex = events[eventindex].DestinationCust - 1000;
+
+                    if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) {
+                        reachedorigin = 1;
+                        waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
+                        //continue;
+                    }
+                    else {
+                        if (reachedorigin == 1) {
+                            goto gotodestination;
+                        }
+                        else {
+                        gotodestination2:
+                            move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
+                            //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height, cars[0]); //put origin coordinates as destination);
+                            //move_car_to_destination(cars, customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
+                            
+                            if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) { // new 
+                                reachedorigin = 1; // new 
+                                cars[0].x = cars[0].temp_x;
+                                cars[0].y = cars[0].temp_y;
+                                waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
+                            } // new 
+                            //continue;
+                        }
+                    }
+                }
+                //else { // car is not available
+                    //continue;
+                //}
+                //Sleep(50);
+            }
+            else { // events.time!=time so there is still more time till the event
+                //continue;
+               // Sleep(50);
+            }
+        }
+        else { // fullfillingorder = 1
+            if (waittime == 0 && reachedorigin == 1) {
+            gotodestination:
+                if (cars[0].x == customers[receiverindex].locationx && cars[0].y == customers[receiverindex].locationy) { //yes
+                    if (recordneeded == 0) {
+                        recordneeded = 1;
+                        reacheddestination = 1;
+
+                        waittime = (customers[receiverindex].Floor * 15) + (customers[receiverindex].Floor * 10);
+                        //continue;
+                    }
+                    else { // recordneeded ==1
+                        //making the record
+                        events[eventindex].deliverytime = timecount;
+                        fprintf(fout,"500\t%d\t%d\%d\t%d\n", events[eventindex].OriginCust, events[eventindex].DestinationCust, events[eventindex].pickuptime, events[eventindex].deliverytime); // make sure to add not overwrite
+                        // 
+                        //remove the event from the list. 
+                        //resetting the variables
+                        fullfillingorder = 0; // yes=1 No=0
+                        cars[0].availability = 1;
+                        waittime = 0;
+                        reachedorigin = 0;
+                        reacheddestination = 0;
+                        recordneeded = 0;
+                        exitloop = 1;
+                        eventindex++;
+                        if (eventindex > MAX_EVENTS) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                    //move_car_to_destination(cars, customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height);
+                    //continue;
+                }
+
+            }
+            else { // waittime!=0 or reachedoring !=1
+                if (waittime == 0) {
+                    goto gotodestination2;
+                }
+                waittime--;
+                //continue;
+            }
+            //Sleep(100);
+        }
+        //increment time counter
+        Sleep(10);
+        timecount++;
+        move_cursor(1, 50);
+        //move_cursor(2, map_width+50);
+        printf("time: %d", timecount);
+        move_cursor(2, 50);
+        printf("car @: %d %d. Car Batter level = %d. Tempstate:%d", cars[0].x, cars[0].y, cars[0].batterylevel, cars[0].tempstate);
+        //printf("time: %d", timecount);
+    }
+
+
 
     //while (1) { // make this while(there are no more orders.) //exitloop != 1 
     //    //move_cursor(21, 10);
@@ -230,115 +349,6 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
     //       move_cursor(21, 10);
     //       printf("time: %d", timecount);
     //}
-
-    int senderindex, receiverindex;
-
-
-    while (1) { // make this while(there are no more orders.) //exitloop != 1 
-        //move_cursor(21, 10);
-        //printf("time: %d", timecount);
-        senderindex = events[eventindex].OriginCust - 1000;
-        receiverindex = events[eventindex].DestinationCust - 1000;
-        // is there a current order being fulfilled?
-        if (fullfillingorder == 0) {
-            // get the time for the event
-            if (events[eventindex].time >= timecount) { // changed was ==
-                if (cars[0].availability == 1) {
-                    fullfillingorder = 1;
-                    cars[0].availability = 0;
-                    events[eventindex].pickuptime = timecount;
-                    //get origin coordinates from the files
-                    //int senderindex = events.OriginCust - 1000;
-                    //int receiverindex = events.DestinationCust - 1000;
-                    senderindex = events[eventindex].OriginCust - 1000;
-                    receiverindex = events[eventindex].DestinationCust - 1000;
-
-                    if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) {
-                        reachedorigin = 1;
-                        waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
-                        //continue;
-                    }
-                    else {
-                        if (reachedorigin == 1) {
-                            goto gotodestination;
-                        }
-                        else {
-                        gotodestination2:
-                            move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
-                            //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height, cars[0]); //put origin coordinates as destination);
-                            //move_car_to_destination(cars, customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
-                            
-                            if (cars[0].x == customers[senderindex].locationx && cars[0].y == customers[senderindex].locationy) { // new 
-                                reachedorigin = 1; // new 
-                                waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
-                            } // new 
-                            //continue;
-                        }
-                    }
-                }
-                //else { // car is not available
-                    //continue;
-                //}
-                Sleep(50);
-            }
-            else { // events.time!=time so there is still more time till the event
-                //continue;
-                Sleep(50);
-            }
-        }
-        else { // fullfillingorder = 1
-            if (waittime == 0 && reachedorigin == 1) {
-            gotodestination:
-                if (cars[0].x == customers[receiverindex].locationx && cars[0].y == customers[receiverindex].locationy) { //yes
-                    if (recordneeded == 0) {
-                        recordneeded = 1;
-                        reacheddestination = 1;
-
-                        waittime = (customers[receiverindex].Floor * 15) + (customers[receiverindex].Floor * 10);
-                        //continue;
-                    }
-                    else { // recordneeded ==1
-                        //making the record
-                        events[eventindex].deliverytime = timecount;
-                        fprintf(fout,"500\t%d\t%d\%d\t%d\n", events[eventindex].OriginCust, events[eventindex].DestinationCust, events[eventindex].pickuptime, events[eventindex].deliverytime); // make sure to add not overwrite
-                        // 
-                        //remove the event from the list. 
-                        //resetting the variables
-                        fullfillingorder = 0; // yes=1 No=0
-                        cars[0].availability = 1;
-                        waittime = 0;
-                        reachedorigin = 0;
-                        reacheddestination = 0;
-                        recordneeded = 0;
-                        exitloop = 1;
-                        //break;
-                        eventindex++;
-                    }
-                }
-                else {
-                    move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
-                    //move_car_to_destination(cars, customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height);
-                    //continue;
-                }
-
-            }
-            else { // waittime!=0 or reachedoring !=1
-                if (waittime == 0) {
-                    goto gotodestination2;
-                }
-                waittime--;
-                //continue;
-            }
-            Sleep(100);
-        }
-        //increment time counter
-        timecount++;
-        move_cursor(21, 10);
-        printf("time: %d", timecount);
-    }
-
-
-
     // getting destination 
     //char dest_building[3]; // the coordinates of the destination building
     //char dest_quad[3]; // to get the coordinates of the quadrant in the building

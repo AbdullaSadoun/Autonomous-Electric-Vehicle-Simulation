@@ -38,4 +38,17 @@ CustNum: 1036, First Name: Hargun, Last Name: Gu, Building: EA, Entrance: W, Flo
 CustNum: 1037, First Name: Colby, Last Name: Fraser, Building: EE, Entrance: E, Floor: 2, x:17, y:18
 CustNum: 1038, First Name: Cameron, Last Name: Eldlio, Building: EH, Entrance: W, Floor: 8, x:31, y:18
 CustNum: 1039, First Name: Bill, Last Name: Coleman, Building: FC, Entrance: S, Floor: 5, x:10, y:23
-CustNum: 1040, First Name: Benjamin, Last Name: Ford, Buildi
+CustNum: 1040, First Name: Benjamin, Last Name: Ford, Building: EF, Entrance: N, Floor: 4, x:22, y:17
+CustNum: 1041, First Name: Matthew, Last Name: Takacs, Building: AI, Entrance: N, Floor: 10, x:34, y:1
+CustNum: 1042, First Name: Bailee, Last Name: Ens, Building: EG, Entrance: S, Floor: 1, x:26, y:19
+CustNum: 1043, First Name: Sohaib, Last Name: Michels, Building: CC, Entrance: N, Floor: 5, x:10, y:9
+CustNum: 1044, First Name: Marc, Last Name: Thornton, Building: AG, Entrance: W, Floor: 8, x:27, y:2
+CustNum: 1045, First Name: Asma, Last Name: Eddington, Building: EI, Entrance: S, Floor: 4, x:34, y:19
+CustNum: 1046, First Name: Aratha, Last Name: Dubey, Building: FA, Entrance: S, Floor: 9, x:2, y:23
+CustNum: 1047, First Name: Emma, Last Name: Ghosh, Building: EC, Entrance: W, Floor: 1, x:11, y:18
+CustNum: 1048, First Name: Anthony, Last Name: Connell, Building: FB, Entrance: W, Floor: 10, x:7, y:22
+CustNum: 1049, First Name: Grace, Last Name: Godwin, Building: EB, Entrance: W, Floor: 5, x:7, y:18
+CustNum: 1050, First Name: Ali, Last Name: Chartrand, Building: FE, Entrance: S, Floor: 7, x:18, y:23
+CustNum: 1051, First Name: Abdulla, Last Name: Balakumar, Building: FH, Entrance: W, Floor: 5, x:31, y:22
+CustNum: 1052, First Name: Mark, Last Name: Thanamay, Building: AH, Entrance: N, Floor: 9, x:30, y:1
+CustNum: 1053, First Name: Tekifhar, Last Name: Hazelnut, Building: DG, Entrance: E, Floor: 3, x:25, y:14

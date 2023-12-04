@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PT53.h">
+    <ClInclude Include="Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PT53.c">
+    <ClCompile Include="Simulation.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.c">
