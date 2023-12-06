@@ -395,106 +395,45 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     //car->temp_y = temp_y;
 
     if (car->tempstateset == 0) {
-        car->temp_x = (dest_x / 4) * 4;
-        car->temp_y = (dest_y / 4) * 4;
+        car->temp_x = dest_x + 2;
+        car->temp_y = dest_y + 2;
         car->tempstateset = 1;
     }
 
-    //Sleep(50);
     clear_car(*car);
 
-    if (car->tempstate == 0) {
-    hala2:
-        if (car->x < car->temp_x) { // moving in x-axis
-            if ((car->y % 4 == 0) && ((car->y / 4) % 2 == 0) || (car->y == 0) || (car->y == map_height)) {
-                // if car on movable street, and street/4 is odd numbered street or car is on top strret or botom
-                car->x++;
-            }
-            else {
-                //car->temp_y = car->temp_y + 4;//increment temporary y by 4
-                car->temp_y = car->temp_y + 1;
-                draw_car(*car);
-            }
-        }
-        else if (car->x > car->temp_x) {
-            // Check if y is on an even-numbered block and if it's allowed to move
-            if ((car->y % 4 == 0) && ((car->y / 4) % 2 != 0) || (car->y == 0) || (car->y == map_height)) {
-                car->x--;
-            }
-            else {
-                //car->temp_y = car->temp_y + 4; //increment temporary y by 4
-                car->temp_y = car->temp_y + 1;
-                goto hala;
-                //draw_car(*car);
-
-            }
-
-        }
-        else {
-        hala:
-            if (car->y < car->temp_y) {
-                // Check if x is on an even-numbered block and if it's allowed to move
-                if ((car->x % 4 == 0) && ((car->x / 4) % 2 == 0) || (car->x == 0) || (car->x == map_width)) {
-                    car->y++;
-                }
-                else {
-                    car->temp_x = car->temp_x + 4; //increment temporary x by 4
-                    goto hala2;
-                    //draw_car(*car);
-                    //return;
-                }
-            }
-            else if (car->y > car->temp_y) {
-                // Check if x is on an even-numbered block and if it's allowed to move
-                if ((car->x % 4 == 0) && ((car->x / 4) % 2 != 0) || (car->x == 0) || (car->x == map_width)) {
-                    car->y--;
-                }
-                else {
-                    car->temp_x = car->temp_x + 4;//increment temporary x by 4
-                    //draw_car(*car);
-                    //return;
-                }
-            }
-            else {
-                car->tempstate = 1;
-                return;
-            }
-        }
+    //if (car->tempstate == 0) {
+    
+    if (car->x < car->temp_x && car->y%4==0) { // moving in x-axis
+        car->x++;
     }
-    else {
-
-        if (car->x < dest_x) {
-            car->x++;
-        }
-        else if (car->x > dest_x) {
-            car->x--;
-        }
-        else {
-            if (car->y < dest_y) {
-                car->y++;
-            }
-            else if (car->y > dest_y) {
-                car->y--;
-            }
-        }
+    else if (car->x > car->temp_x && car->y % 4 == 0) {
+        car->x--;
     }
-
-
+    else if (car->y < car->temp_y && car->x % 4 == 0) {
+        car->y++;
+    }
+    else if (car->y > car->temp_y && car->x % 4 == 0) {
+        car->y--;
+    }
+    //else if (car->x == car->temp_x && car->x == car->temp_x) {
+    else{
+        clear_car(*car);
+        //movecursor(3, 50);
+        //printf("car is at the destination");
+        car->tempstate = 0;
+        car->tempstateset = 0;
+        Sleep(10);
+        return;
+    }
+     
     // if the car coordinates are also building coordinates then it would print out the info instead of drawing the car. 
     car->batterylevel = car->batterylevel - 1;
     draw_car(*car);
     //move_cursor(2, map_width+50);
     //printf("car @: %d %d. Car Batter level = %d. Tempstate:%d", car->x, car->y, car->batterylevel, car->tempstate);
 
-    if (car->x == dest_x && car->y == dest_y) { // check if you have reached the destination
-        //printf(". Destination reached!, car is at: %d %d\n", dest_x, dest_y);
-        //Sleep(3000);
-        //car->x = temp_x;
-        //car->y = temp_y;
-        car->tempstate = 0;
-        car->tempstateset = 0;
-        return; // exit the function since destination is reached
-    }
+   
 
     Sleep(10);
     return;

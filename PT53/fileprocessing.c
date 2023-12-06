@@ -85,6 +85,9 @@ void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]) {
         int dest_y = originy + streeth * (dest_building_row + 1) + buildingh * dest_building_row + buildingh / 2;
         int dest_x = originx + avenuew * (dest_building_col + 1) + buildingw * dest_building_col + buildingw / 2;
 
+        customers[customerIndex].buildingx = dest_x;
+        customers[customerIndex].buildingy = dest_y;
+
         if (customers[customerIndex].Entrance[0] == 'N') {
             dest_y = dest_y - 1;
             if (customers[customerIndex].Entrance[1] == 'E') {

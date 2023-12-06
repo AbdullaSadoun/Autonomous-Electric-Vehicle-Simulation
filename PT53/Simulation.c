@@ -142,7 +142,7 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
 
     int senderindex, receiverindex;
 
-
+    /*
     while (1) { // make this while(there are no more orders.) //exitloop != 1 
         //move_cursor(21, 10);
         //printf("time: %d", timecount);
@@ -174,7 +174,8 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                         }
                         else {
                         gotodestination2:
-                            move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
+                            //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
+                            move_car_to_destination(&cars[0], customers[senderindex].buildingx, customers[senderindex].buildingy, map_width, map_height);
                             //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height, cars[0]); //put origin coordinates as destination);
                             //move_car_to_destination(cars, customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
                             
@@ -230,7 +231,8 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                     }
                 }
                 else {
-                    move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                    //move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                    move_car_to_destination(&cars[0], customers[receiverindex].buildingx, customers[receiverindex].buildingy, map_width, map_height);
                     //move_car_to_destination(cars, customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height);
                     //continue;
                 }
@@ -254,7 +256,117 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
         move_cursor(2, 50);
         printf("car @: %d %d. Car Batter level = %d. Tempstate:%d", cars[0].x, cars[0].y, cars[0].batterylevel, cars[0].tempstate);
         //printf("time: %d", timecount);
+    }*/
+cars[0].waittime = 0;
+
+while (1) { // make this while(there are no more orders.) //exitloop != 1 
+    //move_cursor(21, 10);
+    //printf("time: %d", timecount);
+    senderindex = events[eventindex].OriginCust - 1000;
+    receiverindex = events[eventindex].DestinationCust - 1000;
+    // is there a current order being fulfilled?
+    if (fullfillingorder == 0) {
+        // get the time for the event
+        if (events[eventindex].time <= timecount) { // changed was ==
+            if (cars[0].availability == 1) {
+                fullfillingorder = 1;
+                cars[0].availability = 0;
+                cars[0].tempstateset = 0;
+                events[eventindex].pickuptime = timecount;
+                //get origin coordinates from the files
+                //int senderindex = events.OriginCust - 1000;
+                //int receiverindex = events.DestinationCust - 1000;
+                senderindex = events[eventindex].OriginCust - 1000;
+                receiverindex = events[eventindex].DestinationCust - 1000;
+
+                if (cars[0].x == customers[senderindex].buildingx +2 && cars[0].y == customers[senderindex].buildingy+2) {
+                    reachedorigin = 1;
+                    cars[0].waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
+                    //continue;
+                }
+                else {
+                    if (reachedorigin == 1) {
+                        goto gotodestination;
+                    }
+                    else {
+                    gotodestination2:
+                        //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height); //put origin coordinates as destination);
+                        //move_car_to_destination(&cars[0], customers[senderindex].buildingx, customers[senderindex].buildingy, map_width, map_height);
+                        //move_car_to_destination(&cars[0], customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height, cars[0]); //put origin coordinates as destination);
+                        //move_car_to_destination(cars, customers[senderindex].locationx, customers[senderindex].locationy, map_width, map_height);
+
+                        if (cars[0].x == customers[senderindex].buildingx +2 && cars[0].y == customers[senderindex].buildingy+2) { // new 
+                            reachedorigin = 1; // new 
+                            cars[0].waittime = (customers[senderindex].Floor * 15) + (customers[senderindex].Floor * 10);
+                            move_cursor(3, 50);
+                            printf("car is at %s", customers[senderindex].Building);
+                        }
+                        else {
+                            move_car_to_destination(&cars[0], customers[senderindex].buildingx, customers[senderindex].buildingy, map_width, map_height);
+                        }
+                    }
+                }
+            }
+        }
     }
+    else { // fullfillingorder = 1
+        if (cars[0].waittime == 0 && reachedorigin == 1) {
+        gotodestination:
+            if (cars[0].x == customers[receiverindex].buildingx+2 && cars[0].y == customers[receiverindex].buildingy+2) { //yes
+                if (recordneeded == 0) {
+                    recordneeded = 1;
+                    reacheddestination = 1;
+
+                    cars[0].waittime = (customers[receiverindex].Floor * 15) + (customers[receiverindex].Floor * 10);
+                    //continue;
+                }
+                else { // recordneeded ==1
+                    //making the record
+                    events[eventindex].deliverytime = timecount;
+                    fprintf(fout, "500\t%d\t%d\%d\t%d\n", events[eventindex].OriginCust, events[eventindex].DestinationCust, events[eventindex].pickuptime, events[eventindex].deliverytime); // make sure to add not overwrite
+                    // 
+                    //remove the event from the list. 
+                    //resetting the variables
+                    fullfillingorder = 0; // yes=1 No=0
+                    cars[0].availability = 1;
+                    cars[0].waittime = 0;
+                    reachedorigin = 0;
+                    reacheddestination = 0;
+                    recordneeded = 0;
+                    exitloop = 1;
+                    eventindex++;
+                    if (eventindex > MAX_EVENTS) {
+                        break;
+                    }
+                }
+            }
+            else {
+                //move_car_to_destination(&cars[0], customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height); // HARDCODE
+                move_car_to_destination(&cars[0], customers[receiverindex].buildingx, customers[receiverindex].buildingy, map_width, map_height);
+                //move_car_to_destination(cars, customers[receiverindex].locationx, customers[receiverindex].locationy, map_width, map_height);
+                //continue;
+            }
+
+        }
+        else { // waittime!=0 or reachedoring !=1
+            if (cars[0].waittime == 0) {
+                goto gotodestination2;
+            }
+            cars[0].waittime--;
+            //continue;
+        }
+        //Sleep(100);
+    }
+    //increment time counter
+    Sleep(10);
+    timecount++;
+    move_cursor(1, 50);
+    //move_cursor(2, map_width+50);
+    printf("time: %d", timecount);
+    move_cursor(2, 50);
+    printf("car @: %d %d. Car Batter level = %d. Tempstate:%d. WT: %d", cars[0].x, cars[0].y, cars[0].batterylevel, cars[0].tempstate, cars[0].waittime);
+    //printf("time: %d", timecount);
+}
 
 
 

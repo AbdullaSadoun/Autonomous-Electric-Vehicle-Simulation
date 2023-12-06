@@ -61,7 +61,8 @@ typedef struct {
     int temp_x;
     int temp_y;
     int tempstateset;
-
+    int waittime;
+    //int reachedorigin;
 } Car;
 
 typedef struct {
@@ -78,6 +79,8 @@ typedef struct {
     int Floor;
     int locationx;
     int locationy;
+    int buildingx;
+    int buildingy;
 } Customer;
 
 typedef struct {
