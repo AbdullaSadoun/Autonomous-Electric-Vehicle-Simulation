@@ -1,4 +1,4 @@
-#include Simulation.h"
+#include "Simulation.h"
 
 // Dr. Hughes' functions used: //
 struct prompt bldg_t[] = { {"Charge",CHG}, {"Stable",STB}, {"Both", BOTH} };
