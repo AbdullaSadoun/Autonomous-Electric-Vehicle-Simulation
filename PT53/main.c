@@ -1,7 +1,7 @@
 /*
 Updated versoin of PT5
 This version should include:
-- add perimeter or no no zone
+- add perimeter or zone
 - ask user to specify vehicle origin
 - direction rules
 - ask user for direction rules
@@ -19,13 +19,6 @@ This version should include:
 int main(int argc, char* argv[]) {
     int NSno, EWno;
 
-     //from BldgReader.c
-   /* if (argc != 2)
-    {
-        printf("Supply name of data file\n");
-        (void)getchar();
-        return;
-    }*/
     if (argc != 4) { // was != 3
         printf("Usage: %s <BuildingDataFile> <CustomerDataFile> <EventDataFile>\n", argv[0]);
         return 1;

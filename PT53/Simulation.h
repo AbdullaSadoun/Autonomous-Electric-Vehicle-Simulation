@@ -122,15 +122,7 @@ enum AVE_DIR { North, South };
 enum BLDG_TYPE { CHG, STB, BOTH };
 enum QUAD { NE, N, NW, E, LBL, W, SE, S, SW };
 
-//struct prompt bldg_t[] = { {"Charge",CHG}, {"Stable",STB}, {"Both", BOTH} };
-///*struct prompt ew[] = {{"East", East}, {"West", West}};
-//struct prompt ns[] = { {"North", North}, {"South", South} };*/
-//struct prompt bldg_q[] = {
-//    {"NE",NE}, {"N",N}, {"NW",NW},
-//    {"E",E}, {"LBL",-1}, {"W",W},
-//    {"SE",SE}, {"S",S}, {"SW",SW} };
-// 
-//Building file descriptor
+
 FILE* bfd;
 
 // Dr. Hughes' functions used: //
