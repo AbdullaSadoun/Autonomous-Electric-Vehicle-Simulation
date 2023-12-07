@@ -37,7 +37,6 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     - this is the primary function that is used to move the vehicles.
     - the function creates new temporary coordinates that take the car to closest intersection
     - it moves the car by comparing the current car coordinates to destination coordinates
-    - after the car gets to the closest interection it changes the destination to be the actual destination and then makes its way to the building
     - it does that by doing the same method above my comparing coordinates but this time to destination coordinates
     Updates:
     - the function now decrements the car battery every time its used.

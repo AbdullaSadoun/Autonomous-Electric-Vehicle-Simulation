@@ -27,7 +27,6 @@
 #define streeth 1
 #define MAX_BUILDINGS 100
 #define MAX_CARS 4
-
 #define MAX_CUSTOMERS 100
 #define MAX_EVENTS 100
 
@@ -52,20 +51,22 @@ typedef struct {
 
 typedef struct {
     char symbol;
-    int x; // later make this a type point called current 
-    int y; // later make this a type point called current
+    int x;  
+    int y; 
     int chosen;
-    //Point current;
     Point destination;
-    int batterylevel;
-    int maxbatterylevel;
     int tempstate;
     int availability;
     int temp_x;
     int temp_y;
     int tempstateset;
+    
+    int VIN;
+
     int waittime;
-    int milage;
+    int totalwaittime;
+
+    int milage; // = total time moving
     int fullfillingorder;
     int reachedorigin;
     int reacheddestination;
@@ -75,6 +76,11 @@ typedef struct {
     int receiverindex;
     int Deliveryno;
     int assignedeventindex;
+
+    int batterylevel;
+    int maxbatterylevel; // must be preset
+    int batteryrechargerate; // must be preset
+    int totaltimecharging; //increment as charging
 } Car;
 
 typedef struct {
@@ -134,40 +140,30 @@ enum AVE_DIR { North, South };
 enum BLDG_TYPE { CHG, STB, BOTH };
 enum QUAD { NE, N, NW, E, LBL, W, SE, S, SW };
 
-
 FILE* bfd;
 
-// Dr. Hughes' functions used: //
-void read_file(unsigned int* EWno, unsigned int* NSno);
-void move_cursor(int row, int col);
-void draw_box(int ulr, int ulc, int height, int width);
-
 // my functions //
-void label_building(int y, int x, char label1, char label2);
+
+/* fileporcessing.c prototypes */
+void read_file(unsigned int* EWno, unsigned int* NSno); // Reads the binary input file used to generate the map
+void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]); // Reads and processes the customer file
+void readprocessEventF(char* filename, Event events[MAX_EVENTS]); // Function that reads and processes Event File
+
+/* mapgeneration.c prototypes */
+void generateMap(int NSno, int EWno, int* map_height, int* map_width); // Function that generates the Map with the buildings in it
+void draw_box(int ulr, int ulc, int height, int width); // draws a box which will later be the buildings 
+void label_building(int y, int x, char label1, char label2); // labels the buildings AA, AB, AC ...etc.
 void add_building_to_coords(int x, int y); // this function adds the coordinate of the generated building to array building_coords
 int is_building_at(int x, int y); // this function returns 1 if coordinates are found in a building and 0 otherwise
-//void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height); // "attempts" moves car to destination
-void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height);
 
-//void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height, Car cars[]);
-//void move_car_to_destination(Car cars[], int dest_x, int dest_y, int map_width, int map_height);
+/* carmovement.c prototypes */
+void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height); // "attempts" moves car to destination
 void draw_car(Car car); // draws the car on its current coordinates on the map
 void clear_car(Car car); // clears the car on its current coordinates on the map
+
+
+/* Simulation.c Prototypes */
+void move_cursor(int row, int col); // Function used to navigate through the graphical interface
 void run_simulation(int NSno, int EWno, Customer customers[], Event events[]); // uses all the functions above to run the simulation of one car
-
-void readprcoessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]); // Reads and processes the customer file
-//int readprocessCustomerF(char* filename, Customer customers[MAX_CUSTOMERS]);
-//void readprocessEventF(char* filename) // Reads and processes the events file
-
-void readprocessEventF(char* filename, Event events[MAX_EVENTS]);
-
-
-
-void generateMap(int NSno, int EWno, int* map_height, int* map_width);
-
-
-
-
-
 
 #endif //Simulation
