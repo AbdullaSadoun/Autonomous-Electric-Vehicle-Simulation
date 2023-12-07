@@ -26,6 +26,7 @@
 #define avenuew 1
 #define streeth 1
 #define MAX_BUILDINGS 100
+#define MAX_CARS 4
 
 #define MAX_CUSTOMERS 100
 #define MAX_EVENTS 100
@@ -53,16 +54,27 @@ typedef struct {
     char symbol;
     int x; // later make this a type point called current 
     int y; // later make this a type point called current
+    int chosen;
     //Point current;
     Point destination;
     int batterylevel;
+    int maxbatterylevel;
     int tempstate;
     int availability;
     int temp_x;
     int temp_y;
     int tempstateset;
     int waittime;
-    //int reachedorigin;
+    int milage;
+    int fullfillingorder;
+    int reachedorigin;
+    int reacheddestination;
+    int recordneeded;
+    //int eventindex;
+    int senderindex;
+    int receiverindex;
+    int Deliveryno;
+    int assignedeventindex;
 } Car;
 
 typedef struct {

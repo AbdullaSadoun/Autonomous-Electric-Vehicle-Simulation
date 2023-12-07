@@ -10,6 +10,7 @@ void clear_car(Car car) {
     move_cursor(car.y, car.x);
     printf(" ");
 }
+
 /*
 void add_building_to_coords(int x, int y) { // this adds every coordinate used in the building to an array // function no longer needed
     for (int i = 0; i < 3; i++) {
@@ -43,7 +44,6 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
     -
     */
 
-
     if (car->tempstateset == 0) {
         car->temp_x = dest_x + 2;
         car->temp_y = dest_y + 2;
@@ -74,10 +74,10 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
         return;
     }
     
+    car->milage++;
     car->batterylevel = car->batterylevel - 1;
     draw_car(*car);
 
     Sleep(10);
     return;
-
 }
