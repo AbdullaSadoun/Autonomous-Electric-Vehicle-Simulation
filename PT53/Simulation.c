@@ -44,41 +44,12 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[], FI
     */
     
 
-    //FILE* fout = fopen("Delivery.txt", "w");
-
-    
-    //fprintf(fout, "Package No.\tOriginCustomer\tDeliveryCustomer\tPickupTime\tDeliveryTime\n");
-
     COORD scrsize;
     Console = GetStdHandle(STD_OUTPUT_HANDLE);
     scrsize = GetLargestConsoleWindowSize(Console);
     srand((unsigned int)time(NULL));
  
-    /*
-    Car cars[MAX_CARS]; // Declaring the array of Cars.
-
-    for (int i = 0; i < MAX_CARS; i++) { //setting the preconditions for the car/s:
-        printf("choose car%d?... 1 for yes, 0 for no: ", i);
-        scanf("%d", &cars[i].chosen);
-        cars[i].x = 0;
-        cars[i].y = 0;
-        cars[i].symbol = 'w' + i;
-        cars[i].tempstate = 0;
-        cars[i].batterylevel = 100;
-        cars[i].milage = 0;
-        cars[i].fullfillingorder = 0;
-        cars[i].reachedorigin = 0;
-        cars[i].reacheddestination = 0;
-        cars[0].recordneeded = 0;//
-        cars[0].senderindex = 0;//
-        cars[i].Deliveryno = 0;
-        cars[i].availability = 1; // 1=available, 0=unavailable
-        cars[i].waittime = 0;    
-        cars[i].maxbatterylevel = 100;
-        cars[i].batteryrechargerate = 1; // kW.t
-        cars[i].totaltimecharging = 0;
-    }
-    */
+ 
     int maxCars;
     printf("Enter the maximum number of cars: ");
     scanf("%d", &maxCars);
@@ -195,7 +166,7 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[], FI
                                 }
                             }
                         }
-                    }
+                    } 
                 }
                 else { // fullfillingorder = 1
                     if (cars[i].waittime == 0 && cars[i].reachedorigin == 1) {
@@ -279,6 +250,6 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[], FI
         
     }
 
-    free(cars);
+    free(cars); // free the memory allocated for the array of cars
     return;
 }

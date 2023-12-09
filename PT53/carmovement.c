@@ -11,27 +11,6 @@ void clear_car(Car car) {
     printf(" ");
 }
 
-/*
-void add_building_to_coords(int x, int y) { // this adds every coordinate used in the building to an array // function no longer needed
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            building_coords[total_building_coords].x = x + j;
-            building_coords[total_building_coords].y = y + i;
-            total_building_coords++;
-        }
-    }
-}
-
-int is_building_at(int x, int y) { // this function is no longer needed
-    for (int i = 0; i < total_building_coords; i++) {
-        if (building_coords[i].x == x && building_coords[i].y == y) {
-            return 1;
-        }
-    }
-    return 0;
-}
-*/
-
 void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, int map_height) {
     /*
     - this is the primary function that is used to move the vehicles.
@@ -73,6 +52,7 @@ void move_car_to_destination(Car* car, int dest_x, int dest_y, int map_width, in
         return;
     }
     
+    car->TotalTimeMoving++;
     car->milage++;
     car->batterylevel = car->batterylevel - 1;
     draw_car(*car);

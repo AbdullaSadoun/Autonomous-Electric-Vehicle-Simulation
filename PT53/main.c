@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         return; // or exit with an error code
     }
     fprintf(Vehicle, "VIN\tLastStable\tBatteryCapcity\tBatteryCharge\tBatteryRechargeRate\tDrivingDischargeRate\tIdlingDischargeRate\tTotalTimeMoving\tTotalTimeWaiting\tTotalTimeCharging\n");
-    fflush(Vehicle);
+    fflush(Vehicle); // flushes the buffer to the file
 
 
     read_file(&EWno, &NSno); // will get the number of buildings in the rows and coloumns from the binary inputfile
@@ -53,10 +53,11 @@ int main(int argc, char* argv[]) {
 
     run_simulation(NSno, EWno, customers, events, Delivery, Vehicle); // runs the program
 
-    (void) getchar(); // keeps the output window open
-
+    // close all files
     fclose(bfd);
-    fclose(Delivery);
-    fclose(Vehicle);
+    fclose(Delivery); 
+    fclose(Vehicle); 
+
+    (void) getchar(); // keeps the output window open
     return 0;
 }
