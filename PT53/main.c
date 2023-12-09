@@ -25,6 +25,24 @@ int main(int argc, char* argv[]) {
         return;
     }
 
+    FILE* Delivery = fopen("Delivery.txt", "w");
+    if (Delivery == NULL) {
+        perror("Error opening Delivery file");
+        return; // or exit with an error code
+    }
+    fprintf(Delivery, "Package No.\tOriginCustomer\tDeliveryCustomer\tPickupTime\tDeliveryTime\n");
+    fflush(Delivery);
+
+
+    FILE* Vehicle = fopen("Vehicle.txt", "w");
+    if (Delivery == NULL) {
+        perror("Error opening Vehicle file");
+        return; // or exit with an error code
+    }
+    fprintf(Vehicle, "VIN\tLastStable\tBatteryCapcity\tBatteryCharge\tBatteryRechargeRate\tDrivingDischargeRate\tIdlingDischargeRate\tTotalTimeMoving\tTotalTimeWaiting\tTotalTimeCharging\n");
+    fflush(Vehicle);
+
+
     read_file(&EWno, &NSno); // will get the number of buildings in the rows and coloumns from the binary inputfile
 
     Customer customers[MAX_CUSTOMERS]; // Delcares customers array of type Customers
@@ -33,9 +51,12 @@ int main(int argc, char* argv[]) {
     Event events[MAX_EVENTS]; // Declares events array of type Events
     readprocessEventF(argv[3], events);// read and process events file // make this in the run simulation?
 
-    run_simulation(NSno, EWno, customers, events); // runs the program
+    run_simulation(NSno, EWno, customers, events, Delivery, Vehicle); // runs the program
 
     (void) getchar(); // keeps the output window open
 
+    fclose(bfd);
+    fclose(Delivery);
+    fclose(Vehicle);
     return 0;
 }

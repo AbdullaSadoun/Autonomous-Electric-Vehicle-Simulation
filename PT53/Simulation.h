@@ -62,25 +62,28 @@ typedef struct {
     int tempstateset;
     
     int VIN;
+    char laststable[3];
 
-    int waittime;
-    int totalwaittime;
+    int waittime; // = time to wait
 
     int milage; // = total time moving
     int fullfillingorder;
-    int reachedorigin;
-    int reacheddestination;
-    int recordneeded;
-    //int eventindex;
-    int senderindex;
-    int receiverindex;
-    int Deliveryno;
-    int assignedeventindex;
+    int reachedorigin; // = 1 if reached origin
+    int reacheddestination; // = 1 if reached destination
+    int recordneeded; // = 1 if record needed
+    int senderindex; // = customer index
+    int receiverindex; // = customer index
+    int Deliveryno; // = delivery number
+    int assignedeventindex; // = event index
 
-    int batterylevel;
+    int batterylevel; // = current battery level
     int maxbatterylevel; // must be preset
     int batteryrechargerate; // must be preset
     int totaltimecharging; //increment as charging
+    int drivingdischarge; // must be preset
+    int totalwaittime; //increment as waiting
+    int IdlingDischargeRate; // must be preset
+    int TotalTimeMoving; //increment as moving
 } Car;
 
 typedef struct {
@@ -164,6 +167,6 @@ void clear_car(Car car); // clears the car on its current coordinates on the map
 
 /* Simulation.c Prototypes */
 void move_cursor(int row, int col); // Function used to navigate through the graphical interface
-void run_simulation(int NSno, int EWno, Customer customers[], Event events[]); // uses all the functions above to run the simulation of one car
+void run_simulation(int NSno, int EWno, Customer customers[], Event events[], FILE *Delivery, FILE *Vehicle); // uses all the functions above to run the simulation of one car
 
 #endif //Simulation

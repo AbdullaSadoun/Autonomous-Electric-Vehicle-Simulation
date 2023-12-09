@@ -33,7 +33,7 @@ void move_cursor(int row, int col) // move the cursor to where the next characte
     return 0;
 }*/
 
-void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { // added Event events[]
+void run_simulation(int NSno, int EWno, Customer customers[], Event events[], FILE*Delivery, FILE*Vehicle) { // added Event events[]
     /*
     This functions does the following:
     - generates the map
@@ -43,6 +43,11 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
     - Makes the deliveries and runs the software in the while loop
     */
     
+
+    //FILE* fout = fopen("Delivery.txt", "w");
+
+    
+    //fprintf(fout, "Package No.\tOriginCustomer\tDeliveryCustomer\tPickupTime\tDeliveryTime\n");
 
     COORD scrsize;
     Console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -81,31 +86,34 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
     // Dynamically allocate memory for the array of cars
     Car* cars = (Car*)malloc(maxCars * sizeof(Car));
 
-    if (cars == NULL) {
-        printf("Memory allocation failed!\n");
-        return 1;
-    }
 
     // Rest of your code for initializing and setting up each car
     for (int i = 0; i < maxCars; i++) {
         printf("choose car%d?... 1 for yes, 0 for no: ", i);
         scanf("%d", &cars[i].chosen);
-        cars[i].x = 0;
+
+        cars[i].VIN = 100 + (i * 2);  //set vin which starts at 100 and increments by 2 for each car
+        cars[i].x = 0; // set x and y to 0
         cars[i].y = 0;
-        cars[i].symbol = 'w' + i;
+        cars[i].symbol = 'a' + i; // set car symbol to a + i
         cars[i].tempstate = 0;
         cars[i].batterylevel = 100;
         cars[i].milage = 0;
         cars[i].fullfillingorder = 0;
         cars[i].reachedorigin = 0;
         cars[i].reacheddestination = 0;
-        cars[0].recordneeded = 0;//
-        cars[0].senderindex = 0;//
+        cars[i].recordneeded = 0;//
+        cars[i].senderindex = 0;//
         cars[i].Deliveryno = 0;
         cars[i].availability = 1; // 1=available, 0=unavailable
         cars[i].waittime = 0;
         cars[i].maxbatterylevel = 100;
         cars[i].batteryrechargerate = 1; // kW.t
+        cars[i].totaltimecharging = 0;
+        cars[i].drivingdischarge = 1;
+        cars[i].IdlingDischargeRate = 0;
+        cars[i].TotalTimeMoving = 0;
+        cars[i].totalwaittime = 0;
         cars[i].totaltimecharging = 0;
     }
 
@@ -125,9 +133,6 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
     int map_width = &mapheight;
     int map_height = &mapwidth;
 
-    FILE* fout = fopen("Delivery.txt", "a");
-    fprintf(fout, "Package No.\tOriginCustomer\tDeliveryCustomer\tPickupTime\tDeliveryTime\n");
-
     //FILE* Vehicle = fopen("Vehicle.txt", "w");
     //fprintf();
 
@@ -143,9 +148,11 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
 
     while (1) { // make this while(there are no more orders.) //exitloop != 1 
 
-        for (int i = 0; i < 4;i++) {
+        for (int i = 0; i < maxCars;i++) {
             if (cars[i].chosen==1) {
                 if (cars[i].fullfillingorder == 0) {
+                    fprintf(Vehicle, "%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", cars[i].VIN, cars[i].laststable, cars[i].maxbatterylevel, cars[i].batterylevel, cars[i].batteryrechargerate, cars[i].drivingdischarge, cars[i].IdlingDischargeRate, cars[i].TotalTimeMoving, cars[i].totalwaittime, cars[i].totaltimecharging);
+                    fflush(Vehicle);
                     // get the time for the event
                     if (events[eventindex].time <= timecount) { // changed was ==
                         if (cars[i].availability == 1) {
@@ -154,15 +161,15 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                             cars[i].fullfillingorder = 1;
                             cars[i].availability = 0;
                             cars[i].tempstateset = 0;
-                            events[cars[i].assignedeventindex].pickuptime = timecount;
+                            events[cars[i].assignedeventindex].pickuptime = timecount; // 
                             cars[i].senderindex = events[cars[i].assignedeventindex].OriginCust - 1000;
                             cars[i].receiverindex = events[cars[i].assignedeventindex].DestinationCust - 1000;
-                            eventindex++;
-
-                            if (cars[i].x == customers[cars[i].senderindex].buildingx + 2 && cars[i].y == customers[cars[i].senderindex].buildingy + 2) {
-                                cars[0].reachedorigin = 1;
-                                cars[0].waittime = (customers[cars[i].senderindex].Floor * 15) + (customers[cars[i].senderindex].Floor * 10);
-                                cars[0].totalwaittime = cars[0].totalwaittime + cars[0].waittime;
+                            //eventindex++;
+                            
+                            if ((cars[i].x == customers[cars[i].senderindex].buildingx + 2) && (cars[i].y == customers[cars[i].senderindex].buildingy + 2)) {
+                                cars[i].reachedorigin = 1;
+                                cars[i].waittime = (customers[cars[i].senderindex].Floor * 15) + (customers[cars[i].senderindex].Floor * 10);
+                                cars[i].totalwaittime = cars[i].totalwaittime + cars[i].waittime;
                                 //continue;
                             }
                             else {
@@ -175,7 +182,7 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                                     if (cars[i].x == customers[cars[i].senderindex].buildingx + 2 && cars[i].y == customers[cars[i].senderindex].buildingy + 2) { // new 
                                         cars[i].reachedorigin = 1; // new 
                                         cars[i].waittime = (customers[cars[i].senderindex].Floor * 15) + (customers[cars[i].senderindex].Floor * 10);
-                                        cars[0].totalwaittime = cars[0].totalwaittime + cars[0].waittime;
+                                        cars[i].totalwaittime = cars[i].totalwaittime + cars[i].waittime;
                                         clear_car(cars[i]); //new
                                         move_cursor(8 + i, 50);
                                         printf("car%d is at %s", i, customers[cars[i].senderindex].Building);
@@ -197,7 +204,7 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                             if (cars[i].recordneeded == 0) {
                                 cars[i].recordneeded = 1;
                                 cars[i].reacheddestination = 1;
-                                clear_car(cars[0]); //new
+                                clear_car(cars[i]); //new
                                 move_cursor(8 + i, 50);
                                 printf("car%d is at %s", i, customers[cars[i].receiverindex].Building);
                                 cars[i].waittime = (customers[cars[i].receiverindex].Floor * 15) + (customers[cars[i].receiverindex].Floor * 10);
@@ -205,21 +212,27 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                             else { // recordneeded ==1
 
                                 //making the record
-                                events[eventindex].deliverytime = timecount;
-                                fprintf(fout, "%d\t%d\t%d\t%d\t%d\n", cars[i].assignedeventindex + 500, events[cars[i].assignedeventindex].OriginCust, events[cars[i].assignedeventindex].DestinationCust, events[cars[i].assignedeventindex].pickuptime, events[cars[i].assignedeventindex].deliverytime); // make sure to add not overwrite 
+                                events[cars[i].assignedeventindex].deliverytime = timecount;
+                                fprintf(Delivery, "%d\t%d\t%d\t%d\t%d\n", cars[i].assignedeventindex + 500, events[cars[i].assignedeventindex].OriginCust, events[cars[i].assignedeventindex].DestinationCust, events[cars[i].assignedeventindex].pickuptime, events[cars[i].assignedeventindex].deliverytime); // make sure to add not overwrite 
+                                fflush(Delivery);
                                 //resetting the variables
                                 move_cursor(8+i, 50);
                                 printf("              "); // clear the car arrived message
+                                // set the cars last stable as the entrance of the receiver customer
+                                //copy the content of customers[cars[i].receiverindex].Entrance to cars[i].laststable
+                                cars[i].laststable[0] = customers[cars[i].receiverindex].Entrance[0];
+                                cars[i].laststable[1] = customers[cars[i].receiverindex].Entrance[1];
+                                cars[i].laststable[2] = customers[cars[i].receiverindex].Entrance[2];
+
+
                                 cars[i].fullfillingorder = 0; // yes=1 No=0
-                                cars[i].availability = 1;
-                                cars[i].waittime = 0;
-                                cars[i].reachedorigin = 0;
-                                cars[i].reacheddestination = 0;
-                                cars[i].recordneeded = 0;
-                                exitloop = 1;
-                                //eventindex++;
+                                cars[i].availability = 1; // 1=available, 0=unavailable
+                                cars[i].waittime = 0; // wait time
+                                cars[i].reachedorigin = 0; // reset reached origin
+                                cars[i].reacheddestination = 0; // reset reached destination
+                                cars[i].recordneeded = 0; // reset record needed
                                 Deliveryno++;
-                                if (eventindex >= MAX_EVENTS) {
+                                if (eventindex >= MAX_EVENTS) { 
                                     break;
                                 }
                             }
@@ -235,8 +248,8 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
                             goto gotodestination2;
                         }
                         cars[i].waittime--;
-                        if (cars[i].batterylevel < 100) {
-                            cars[i].batterylevel++;
+                        if (cars[i].batterylevel < cars[i].maxbatterylevel) {
+                            cars[i].batterylevel = cars[i].batterylevel + cars[i].batteryrechargerate;
                             cars[i].totaltimecharging++;
                         }
                     }
@@ -250,17 +263,22 @@ void run_simulation(int NSno, int EWno, Customer customers[], Event events[]) { 
 
             }
         }
-
         
+
         // updating the time counter
         Sleep(10);
-        timecount++;
-        move_cursor(1, 50);
-        printf("time: %d", timecount);
+        timecount++; // increment the time counter
+        move_cursor(1, 50); // move the cursor to the time
+        printf("time: %d", timecount); // print the time
+
+        
+        //for (int i = 0; i < maxCars; i++) { // print out vehicle data
+        //    fprintf(Vehicle, "%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", cars[i].VIN, cars[i].laststable, cars[i].maxbatterylevel, cars[i].batterylevel, cars[i].batteryrechargerate, cars[i].drivingdischarge, cars[i].IdlingDischargeRate, cars[i].TotalTimeMoving, cars[i].totalwaittime, cars[i].totaltimecharging);
+        //    fflush(Vehicle); 
+        //}
         
     }
 
     free(cars);
-    fclose(fout);
     return;
 }
